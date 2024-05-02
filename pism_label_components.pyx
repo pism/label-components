@@ -7,7 +7,8 @@ from decl cimport label as cxx_label
 from decl cimport update_max_depth as cxx_update_max_depth
 
 def label(input_array, mark_isolated_components, foreground_threshold, attached_threshold, output_array):
-    """Label connected components in `input_array` (array of `short` integers).
+    """
+    Label connected components in `input_array` (array of `short` integers).
 
     In `input_array`, areas where `input_array > foreground_threshold`
     are "foreground" pixels that make up components to isolate. If
@@ -28,7 +29,8 @@ def label(input_array, mark_isolated_components, foreground_threshold, attached_
     cxx_label(&data[0,0], nrows, ncols, mark_isolated_components, foreground_threshold, attached_threshold, &data_out[0,0])
 
 def update_max_depth(depth, mask, current_depth, max_depth):
-    """Update `max_depth`.
+    """
+    Update `max_depth`.
 
     Each call sets `max_depth = max(max_depth, current_depth)` in all
     areas where `depth > current_depth` and reachable from the "deep
