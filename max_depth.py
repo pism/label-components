@@ -64,7 +64,11 @@ if __name__ == "__main__":
 
     sys.stderr.write(f"Reading from {input_filename}...\n")
     dataset = netCDF4.Dataset(input_filename)
-    bed = dataset.variables["bed"][:]
+    try:
+        bed = dataset.variables["bed"][:]
+    except:
+        bed = dataset.variables["topg"][:]
+
     dataset.close()
     sys.stderr.write(f"Done.\n")
 
