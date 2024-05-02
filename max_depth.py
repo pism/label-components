@@ -38,15 +38,27 @@ def prepare_output(input_filename, output_filename):
     df = netCDF4.Dataset(input_filename, "r")
     out = netCDF4.Dataset(output_filename, "w")
 
-    out.createDimension("x", len(df.dimensions["x"]))
-    out.createDimension("y", len(df.dimensions["y"]))
+    try:
+        x_len = len(df.dimensions["x"])
+        y_len = len(df.dimensions["y"])
+    except:
+        x_len = len(df.dimensions["x1"])
+        y_len = len(df.dimensions["y1"])
+
+    out.createDimension("x", x_len)
+    out.createDimension("y", y_len)
 
     x = out.createVariable("x", datatype=np.float64, dimensions=("x",))
     y = out.createVariable("y", datatype=np.float64, dimensions=("y",))
-    max_depth = out.createVariable("max_depth", datatype=dtype, dimensions=("y", "x"), complevel=9)
 
-    x[:] = df.variables["x"][:]
-    y[:] = df.variables["y"][:]
+    try:
+        x[:] = df.variables["x"][:]
+        y[:] = df.variables["y"][:]
+    except:
+        x[:] = df.variables["x1"][:]
+        y[:] = df.variables["y1"][:]
+
+    max_depth = out.createVariable("max_depth", datatype=dtype, dimensions=("y", "x"), complevel=9, fill_value=-1)
 
     return out
 
@@ -65,15 +77,24 @@ if __name__ == "__main__":
     sys.stderr.write(f"Reading from {input_filename}...\n")
     dataset = netCDF4.Dataset(input_filename)
     try:
+        # BedMachine
         bed = dataset.variables["bed"][:]
+        mask = dataset.variables["mask"][:]
+        depth = -1 * np.array(bed, dtype=dtype)
+        depth[mask == 2] = -1
+        del bed
+        del mask
     except:
+        # ALBMAPv1 (for testing)
         bed = dataset.variables["topg"][:]
+        lsrf = dataset.variables["lsrf"][:]
+        depth = -1 * np.array(bed, dtype=dtype)
+        depth[lsrf == bed] = -1
+        del bed
+        del lsrf
 
     dataset.close()
     sys.stderr.write(f"Done.\n")
-
-    depth = -1 * np.array(bed, dtype=dtype)
-    del bed
 
     # Depth of the "open ocean" used to identify whether an area below
     # a certain depth threshold has a connection to the open ocean.
