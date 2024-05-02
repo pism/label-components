@@ -1,0 +1,16 @@
+# -*- mode: yaml -*-
+cff-version: 1.2.0
+title: "PISM's connected component labeling implementation"
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+contact:
+  - email: uaf-pism@alaska.edu
+    name: "PISM developers at UAF"
+authors:
+  - given-names: Constantine
+    family-names: Khrulev
+    email: ckhroulev@alaska.edu
+    affiliation: University of Alaska Fairbanks
+    orcid: 'https://orcid.org/0000-0003-2170-7454'
+repository-code: 'https://github.com/pism/label-components/'
+license: GPL-3.0-or-later
