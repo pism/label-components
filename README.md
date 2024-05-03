@@ -2,6 +2,13 @@ Python (Cython) module implementing the serial connected component
 labeling algorithm used in PISM to identify "icebergs", label shelves
 in PICO, etc.
 
+Run
+
+```
+python3 setup.py build_ext --inplace
+```
+to build in place.
+
 Unlike PISM's version, this code uses `short int` instead of `double`
 arrays to speed it up. See `pism_label_components.label()`.
 
