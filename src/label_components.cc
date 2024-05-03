@@ -49,35 +49,3 @@ void label(data_t *input_array, int nrows, int ncols, bool mark_isolated_compone
   label(mask(input, foreground_threshold, attached_threshold),
         mark_isolated_components, min_label, output);
 }
-
-/*!
- * Update `max_depth_`.
- *
- * Each call sets `max_depth = max(max_depth, current_depth)` in all
- * areas where `depth > current_depth` and reachable from the "deep
- * ocean" according to `mask_`.
- *
- * @param[in] depth_ ocean depth
- * @param[in] mask_ mask identifying areas *not* reachable from the deep ocean depth
- * @param[in] nrows number of rows in `depth_` and `mask_`
- * @param[in] ncols number of columns in `depth_` and `mask_`
- * @param[in] current_depth current depth
- * @param[in,out] max_depth_ maximum depth (input-output)
- */
-void update_max_depth(data_t *depth_, data_t *mask_, int nrows, int ncols,
-                      data_t current_depth, data_t *max_depth_) {
-
-  array_t depth(depth_, nrows, ncols);
-  array_label_t isolated(mask_, nrows, ncols);
-
-  array_t max_depth(max_depth_, nrows, ncols);
-
-  for (int r = 0; r < nrows; ++r) {
-    for (int c = 0; c < ncols; ++c) {
-      bool reachable = (depth(r, c) > current_depth) and (isolated(r, c) == 0);
-      if (reachable) {
-        max_depth(r, c) = std::max(max_depth(r, c), current_depth);
-      }
-    }
-  }
-}

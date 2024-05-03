@@ -1,8 +1,8 @@
 # cython: language_level=3, embedsignature=True
 # distutils: language = c++
 
+cimport cython
 from decl cimport label as cxx_label
-from decl cimport update_max_depth as cxx_update_max_depth
 
 def label(input_array, mark_isolated_components, foreground_threshold, attached_threshold, output_array):
     """
@@ -41,4 +41,13 @@ def update_max_depth(depth, mask, current_depth, max_depth):
     cdef short [:,::1] mask_ = mask
     cdef short [:,::1] max_depth_ = max_depth
 
-    cxx_update_max_depth(&depth_[0,0], &mask_[0,0], nrows, ncols, current_depth, &max_depth_[0,0])
+    cdef bint reachable = False
+    cdef short current = current_depth
+
+    with cython.boundscheck(False):
+        for r in range(nrows):
+            for c in range(ncols):
+                reachable = depth_[r,c] > current and mask_[r, c] == 0
+
+                if reachable:
+                    max_depth_[r, c] = max(max_depth_[r, c], current)
