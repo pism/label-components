@@ -26,7 +26,8 @@ def find_max_depth(depth, depth_thresholds, open_ocean_depth):
     mask = np.zeros_like(depth, dtype=dtype)
 
     for D in depth_thresholds:
-        sys.stderr.write(f"Processing depth {D}...\n")
+        if int(D) % 10 == 0:
+            sys.stderr.write(f"Processing depth {D}...\n")
 
         mask[:] = 0
         label(depth, True, D, open_ocean_depth, mask)
