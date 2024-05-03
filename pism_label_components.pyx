@@ -1,8 +1,6 @@
 # cython: language_level=3, embedsignature=True
 # distutils: language = c++
 
-import numpy as np
-
 from decl cimport label as cxx_label
 from decl cimport update_max_depth as cxx_update_max_depth
 
