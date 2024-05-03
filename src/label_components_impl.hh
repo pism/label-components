@@ -126,24 +126,11 @@ private:
  * The "array" type has to implement `number_t& operator(row, col)` for some numeric type
  * `number_t` (int, double, etc). The argument `output` is "write only".
  *
- * If `assign_final_labels` is true, then set labels to "final" values. This is
- * appropriate when this function is used on its own (serial algorithm).
+ * - If `identify_isolated_patches` is true, then isolated patches are
+ *   marked with `1` and the rest are set to `0`.
  *
- * Specifically:
- *
- * - If `assign_final_labels` is true and `identify_isolated_patches` is true, then
- *   isolated patches are marked with `1` and the rest are set to `0`.
- *
- * - If `assign_final_labels` is true and `identify_isolated_patches` is false, then
-     patches are labeled with consecutive numbers starting from `min_label`.
- *
- * - If `assign_final_labels` is false then patches "attached" to cells where
- *   `is_attached(i, j)` is true are marked with the smallest odd number that is greater
- *   than or equal to `min_label`. All other patches get consecutive *even* labels. This
- *   labeling scheme is used by the parallel version of this code.
- *
- * Uses labels starting from `min_label`. In the parallel implementation each MPI rank
- * (each sub-domain) has to use *unique* labels; `min_labels` is used to guarantee this.
+ * - If `identify_isolated_patches` is false, then patches are labeled
+ *   with consecutive numbers starting from `min_label`.
  *
  * Note: only foreground cells of `output` are updated.
  */
